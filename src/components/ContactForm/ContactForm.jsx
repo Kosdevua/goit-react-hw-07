@@ -1,8 +1,6 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import s from "./ContactForm.module.css";
-import { nanoid } from "@reduxjs/toolkit";
-import { addContact } from "../../redux/contactsSlice";
 import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contactsOps";
 
@@ -29,6 +27,7 @@ const ContactForm = () => {
       initialValues={{ name: "", number: "" }}
       validationSchema={FeedbackSchema}
       onSubmit={(values, actions) => {
+        dispatch(addContact(values));
         actions.resetForm();
       }}
     >
