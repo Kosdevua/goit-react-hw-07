@@ -1,21 +1,40 @@
-// Файл для зберігання асинхронних генераторів екшенів.
-
-//Оголоси наступні операції:
-
-// fetchContacts - одержання масиву контактів (метод GET) запитом. Базовий тип екшену це рядок "contacts/fetchAll".
-// addContact - додавання нового контакту (метод POST). Базовий тип екшену це рядок "contacts/addContact".
-// deleteContact - видалення контакту по ID (метод DELETE). Базовий тип екшену це рядок "contacts/deleteContact".
-
-//Для коректного опрацювання помилки HTTP-запиту в середині операцій, використай конструкцію try...catch, та у блоці catch поверни результат виклику методу thunkAPI.rejectWithValue.
-
-//Обробку усіх трьох екшенів (fulfilled, rejected, pending) та зміну даних у стані Redux зроби у властивості extraReducers слайсу контактів, а от властивість reducers з нього — прибери.
-
+import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const fetchUserById = createAsyncThunk(
-  "users/fetchByIdStatus",
-  async (userId: number, thunkAPI) => {
-    const response = await userAPI.fetchById(userId);
-    return response.data;
+const BASE_URL = "https://664defe9ede9a2b556558c1d.mockapi.io/contacts";
+
+export const fetchContacts = createAsyncThunk(
+  "contacts/fetchAll",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(BASE_URL);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const addContact = createAsyncThunk(
+  "contacts/addContact",
+  async (contact, thunkAPI) => {
+    try {
+      const response = await axios.post(BASE_URL, contact);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteContact = createAsyncThunk(
+  "contacts/deleteContact",
+  async (contactId, thunkAPI) => {
+    try {
+      await axios.delete(`${BASE_URL}/${contactId}`);
+      return contactId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
