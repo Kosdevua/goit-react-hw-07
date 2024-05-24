@@ -10,15 +10,11 @@ const Contact = ({ id, name, number }) => {
     <li className={s.contact_wrapper}>
       <div className={s.contact_data}>
         <p>
-          <span>
-            <FaUser />
-          </span>
+          <FaUser />
           {name}
         </p>
         <p>
-          <span>
-            <BsFillTelephoneFill />
-          </span>
+          <FaPhone />
           {number}
         </p>
       </div>
